@@ -61,8 +61,65 @@ npx playwright test --ui
 npx playwright show-report
 ```
 
+## 🎨 Figma Design vs HTML 비교 방법
+
+Figma에서 디자인한 산출물(이미지)과 실제 개발된 화면이 얼마나 일치하는지 비교하는 방법입니다.
+
+1. **Figma 이미지 준비**: 비교할 화면(예: 로그인)을 Figma에서 PNG로 내보내기 합니다.
+2. **테스트 최초 실행**: 기준 스냅샷(Baseline)을 생성하기 위해 테스트를 한 번 실행합니다.
+   ```bash
+   npx playwright test tests/login-visual.spec.js
+   ```
+   > ⚠️ 처음에는 스냅샷이 없어서 에러가 발생합니다. (`A snapshot doesn't exist...`)
+3. **스냅샷 파일 교체**:
+   - 생성된 스냅샷 폴더(`tests/login-visual.spec.js-snapshots/`)로 이동합니다.
+   - 방금 생성된 `login-design-chromium-darwin.png` (파일명은 OS/브라우저에 따라 다름) 파일을 삭제합니다.
+   - **준비한 Figma 이미지**를 같은 이름으로 변경하여 해당 위치에 넣어줍니다.
+4. **검증 테스트 실행**: 이제 Figma 이미지가 기준이 됩니다. HTML 화면과 비교해 봅니다.
+
+   ```bash
+   npx playwright test tests/login-visual.spec.js
+   ```
+
+   - 만약 다르면 실패하고, Diff 이미지를 통해 픽셀 단위 차이점을 확인할 수 있습니다.
+
+## 🖼️ 이미지 비교 옵션 (Mismatch Handling)
+
+테스트가 너무 엄격하거나 느슨하다고 느껴질 때, 다음 옵션들을 사용하여 민감도를 조절할 수 있습니다.
+
+### 1. 허용 오차 (Sensitivity)
+
+- **`threshold`**: (기본값: 0.2)
+  - 개별 픽셀의 색상 차이를 얼마나 허용할지 결정합니다. (0 ~ 1)
+  - `0`: 100% 완벽하게 일치해야 함 (가장 엄격)
+  - `1`: 완전히 다른 색상이어도 통과 (가장 느슨)
+  - 예: 안티앨리어싱(Anti-aliasing) 등으로 인한 미세한 차이를 무시하려면 `0.3` 정도로 높여볼 수 있습니다.
+
+### 2. 허용 범위 (Thresholds)
+
+테스트 통과 기준을 "몇 개의 픽셀" 또는 "전체의 몇 %"까지 허용할지 설정합니다.
+
+- **`maxDiffPixels`**:
+  - 허용할 **최대 픽셀 개수**입니다.
+  - 예: `maxDiffPixels: 100` (100개 픽셀 차이까지는 통과)
+
+- **`maxDiffPixelRatio`**:
+  - 허용할 **최대 비율**입니다. (0 ~ 1)
+  - 예: `maxDiffPixelRatio: 0.05` (전체 이미지의 5% 차이까지는 통과)
+
+### 사용 예시
+
+```javascript
+await expect(page).toHaveScreenshot("image.png", {
+  threshold: 0.3, // 색상 차이 민감도 조절
+  maxDiffPixelRatio: 0.05, // 전체의 5% 차이 허용
+  // maxDiffPixels: 100,    // 100 픽셀 차이 허용 (위 옵션과 함께 사용 시 둘 중 하나라도 초과하면 실패)
+});
+```
+
 ## 📂 프로젝트 구조 (Project Structure)
 
+- `public/`: 정적 예제 파일 (예: mock login page)
 - `playwright.config.js`: Playwright 설정 파일 (브라우저, 뷰포트 등 설정)
 - `tests/`: 테스트 파일이 위치하는 디렉토리
   - `visual.spec.js`: 시각적 테스트 예제가 포함된 파일
