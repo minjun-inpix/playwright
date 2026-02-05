@@ -18,7 +18,7 @@ test.describe('Login Page Visual Comparison', () => {
             
             // 1. maxDiffPixelRatio: 허용할 차이의 '비율' (0.05 = 5%)
             // 예: 전체 화면의 5%까지 달라도 테스트를 통과시킵니다.
-            maxDiffPixelRatio: 0.05, 
+            // maxDiffPixelRatio: 0.05, 
 
             // 2. maxDiffPixels: 허용할 차이의 '픽셀 개수'
             // maxDiffPixels: 100, // 100 픽셀까지는 달라도 통과
