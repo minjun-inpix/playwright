@@ -73,7 +73,3 @@ npx playwright show-report
 1. **Baseline Image**: 처음 테스트를 성공했을 때 저장되는 기준 이미지입니다. (`tests/__snapshots__` 폴더 등에 저장됨)
 2. **Comparison**: 이후 테스트 실행 시, 현재 브라우저 화면을 캡처하여 Baseline Image와 픽셀 단위로 비교합니다.
 3. **Diff**: 픽셀 차이가 허용 오차 범위를 넘어서면 테스트가 실패하고, 차이점을 보여주는 Diff 이미지가 생성됩니다.
-
----
-
-이 데모를 통해 Playwright의 강력한 Visual Testing 기능을 체험해 보세요!
