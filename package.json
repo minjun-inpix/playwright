@@ -1,0 +1,22 @@
+{
+  "name": "playwright-visual-demo",
+  "version": "1.0.0",
+  "description": "Playwright Visual Testing Demo",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:update": "playwright test --update-snapshots"
+  },
+  "keywords": [
+    "playwright",
+    "visual-testing",
+    "demo"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.41.0"
+  }
+}
