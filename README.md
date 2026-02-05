@@ -119,11 +119,46 @@ await expect(page).toHaveScreenshot("image.png", {
 
 ## 📂 프로젝트 구조 (Project Structure)
 
-- `public/`: 정적 예제 파일 (예: mock login page)
-- `playwright.config.js`: Playwright 설정 파일 (브라우저, 뷰포트 등 설정)
-- `tests/`: 테스트 파일이 위치하는 디렉토리
-  - `visual.spec.js`: 시각적 테스트 예제가 포함된 파일
-- `test-results/`: 테스트 실패 시 차이점(Diff) 이미지가 저장되는 곳
+이 프로젝트의 주요 파일과 폴더에 대한 상세 설명입니다.
+
+```text
+playwright/
+├── .gitignore               # Git 업로드 제외 설정 (node_modules, 보고서 결과물 등)
+├── package.json             # 프로젝트 의존성 및 실행 스크립트 (test, test:update 등)
+├── playwright.config.js     # Playwright 설정 (브라우저, 뷰포트, Trace 등)
+├── figma-mock.png           # 가상 Figma 디자인 파일 (시각적 비교 테스트용)
+├── public/
+│   └── login.html           # 개발 구현체 예시 (Mock Login Page)
+├── tests/
+│   ├── login-visual.spec.js # 로그인 페이지 시각적 비교 테스트 코드
+│   ├── visual.spec.js       # 기본적인 예제 테스트 코드
+│   └── __snapshots__/       # (자동생성) 테스트 실행 시 기준이 되는 스냅샷 이미지 저장소
+└── README.md                # 프로젝트 설명서
+```
+
+---
+
+## ❓ 트러블슈팅 (Troubleshooting)
+
+### Q. `Error: listen EADDRINUSE: address already in use ::1:9323` 에러가 떠요!
+
+리포트를 보는 명령어(`npx playwright show-report`)를 실행했다가, 종료하지 않고 창만 닫거나 했을 때 자주 발생하는 에러입니다. 기존 프로세스가 포트(9323)를 계속 잡고 있어서 생깁니다.
+
+**해결 방법:**
+
+1. **포트 강제 종료 (추천)**
+   터미널에서 아래 명령어를 입력하여 9323 포트를 사용하는 프로세스를 찾아 종료시킵니다.
+
+   ```bash
+   lsof -ti:9323 | xargs kill -9
+   ```
+
+2. **다른 포트로 실행**
+   기존 포트 대신 다른 포트를 지정하여 리포트를 띄웁니다.
+   ```bash
+   npx playwright show-report --port 0
+   ```
+   (`0`을 입력하면 사용 가능한 임의의 포트를 자동으로 찾습니다.)
 
 ## 📸 Visual Testing 원리
 
